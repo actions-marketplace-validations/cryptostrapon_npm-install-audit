@@ -16,6 +16,8 @@ It reads `package.json` for install hooks (`preinstall`, `install`, `postinstall
 
 No dependencies. No network. Read only.
 
+We also contributed a manual checklist for this situation to the [OWASP NPM Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/NPM_Security_Cheat_Sheet.html): the section "Inspecting a project you did not write" ([#2908](https://github.com/OWASP/CheatSheetSeries/pull/2908)).
+
 ## Who it is for
 
 - **Developers job hunting:** a recruiter sends a take-home repo and asks you to "just run npm install".
