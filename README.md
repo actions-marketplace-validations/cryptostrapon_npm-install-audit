@@ -150,6 +150,6 @@ The check only reads files, so it is safe to run before the agent does anything 
 
 Fake recruiter repos with a poisoned `postinstall` are a common way wallets and credentials get stolen. Background: [malicious test project](https://cryptostrapon.com/stories/malicious-test-project) and [deepfake interviews](https://cryptostrapon.com/stories/deepfake-interviews).
 
-**If this helped, please star the repo. It helps other developers find it.** ⭐
+If this helped, consider [starring the repository](https://github.com/cryptostrapon/npm-install-audit). Reports, corrections and contributions are welcome in the [issue tracker](https://github.com/cryptostrapon/npm-install-audit/issues).
 
 MIT licensed. Maintained by [CryptoStrapon](https://cryptostrapon.com).
