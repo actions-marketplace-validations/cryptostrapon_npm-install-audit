@@ -1,0 +1,9 @@
+{
+  "name": "safe-take-home-demo",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Harmless fixture for read-only review; do not install it.",
+  "scripts": {
+    "postinstall": "node setup.cjs"
+  }
+}
