@@ -9,7 +9,7 @@
     "audit.js"
   ],
   "scripts": {
-    "test": "node selftest.js"
+    "test": "node selftest.js && node scripts/check-safe-demo.cjs"
   },
   "engines": {
     "node": ">=18"

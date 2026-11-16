@@ -76,6 +76,10 @@ file from a specific release or commit instead.
 
 ## Example output
 
+Want a reproducible example instead of a screenshot? Try the
+[harmless take-home demo](docs/safe-take-home-demo.md): two expected findings,
+no dependency installation, and a check that the install hook never ran.
+
 ```
 $ node audit.js ./take-home-task
 ! package.json: postinstall hook runs: node scripts/setup.js
