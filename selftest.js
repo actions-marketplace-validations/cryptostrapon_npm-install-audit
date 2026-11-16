@@ -112,6 +112,19 @@ write("yarn-none/.yarnrc.yml.example", "yarnPath: ignored.cjs\n");
 write("yarn-empty/.yarnrc.yml", "yarnPath: # no binary configured\n");
 write("yarn-mixed/.yarnrc.yml", 'yarnPath: ".yarn/releases/yarn.cjs"\nnpmAuthToken: npm_SECRET456\nnpmRegistryServer: "https://yarn.evil.example"\n');
 
+// Yarn 1 uses a different key and configuration format for the same delegation.
+const yarnClassicMarker = path.join(tmp, "yarn-classic-executed");
+write("yarn-classic/.yarnrc", 'yarn-path "./.yarn/yarn-classic.cjs"\n');
+write("yarn-classic/.yarn/yarn-classic.cjs", 'require("fs").writeFileSync(' + JSON.stringify(yarnClassicMarker) + ', "executed");\n');
+write("yarn-classic-spaces/.yarnrc", 'yarn-path "./.yarn/yarn custom.cjs" # local binary\r\n');
+write("yarn-classic-hash/.yarnrc", "yarn-path './.yarn/yarn#custom.cjs'\n");
+write("yarn-classic-comment/.yarnrc", "yarn-path ./.yarn/yarn.cjs # comment\n");
+write("yarn-classic-safe/.yarnrc", '# yarn-path "./ignored.cjs"\n; yarn-path "./ignored.cjs"\nyarn-path false\nyarn-path false # disabled\nyarn-path ""\nyarn-path # empty\nother-yarn-path "./ignored.cjs"\n');
+write("yarn-classic-quoted-false/.yarnrc", 'yarn-path "false"\n');
+write("yarn-classic-wrong-file/.npmrc", 'yarn-path "./ignored.cjs"\n');
+write("yarn-classic-wrong-file/.yarnrc.yml", 'yarn-path "./ignored.cjs"\n');
+write("yarn-classic-mixed/.yarnrc", 'yarn-path "./.yarn/yarn.cjs"\n//registry.npmjs.org/:_authToken=npm_CLASSIC_SECRET\nregistry "https://yarn.evil.example"\n');
+
 const run = (dir, extra = []) =>
   spawnSync(process.execPath, [path.join(__dirname, "audit.js"), ...extra, dir], { encoding: "utf8" });
 
@@ -245,6 +258,22 @@ check("ignores an empty yarnPath setting", run(path.join(tmp, "yarn-empty")).sta
 const yarnMixed = run(path.join(tmp, "yarn-mixed"));
 check("still flags Yarn registry settings alongside yarnPath", /yarnPath configures Yarn/.test(yarnMixed.stdout) && /ships a registry auth token/.test(yarnMixed.stdout) && /installs come from another registry/.test(yarnMixed.stdout));
 check("still redacts Yarn registry tokens alongside yarnPath", !yarnMixed.stdout.includes("SECRET456"));
+
+const classic = run(path.join(tmp, "yarn-classic"));
+check("Yarn 1 yarn-path exits 1", classic.status === 1);
+check("flags Yarn 1 delegated binary in text", classic.stdout.includes(".yarnrc: yarn-path configures Yarn 1 to run a project binary: ./.yarn/yarn-classic.cjs"));
+const classicJson = run(path.join(tmp, "yarn-classic"), ["--json"]);
+const classicFindings = JSON.parse(classicJson.stdout);
+check("Yarn 1 JSON includes one delegated-binary finding", classicJson.status === 1 && classicFindings.length === 1 && classicFindings[0].file === ".yarnrc" && classicFindings[0].rule.includes("yarn-path"));
+check("does not execute the Yarn 1 delegated binary", !fs.existsSync(yarnClassicMarker));
+check("preserves spaces in a quoted Yarn 1 path", run(path.join(tmp, "yarn-classic-spaces")).stdout.includes("./.yarn/yarn custom.cjs"));
+check("preserves hashes in a quoted Yarn 1 path", run(path.join(tmp, "yarn-classic-hash")).stdout.includes("./.yarn/yarn#custom.cjs"));
+check("removes inline comments from an unquoted Yarn 1 path", JSON.parse(run(path.join(tmp, "yarn-classic-comment"), ["--json"]).stdout)[0]?.rule.endsWith("./.yarn/yarn.cjs"));
+check("ignores disabled, empty, commented and lookalike Yarn 1 keys", run(path.join(tmp, "yarn-classic-safe")).status === 0);
+check("quoted false remains a Yarn 1 path, not the disabling boolean", run(path.join(tmp, "yarn-classic-quoted-false")).status === 1);
+check("does not parse Yarn 1 keys in npm or Yarn YAML config", run(path.join(tmp, "yarn-classic-wrong-file")).status === 0);
+const classicMixed = run(path.join(tmp, "yarn-classic-mixed"));
+check("keeps Yarn 1 registry and token findings without exposing secrets", classicMixed.stdout.includes("yarn-path") && classicMixed.stdout.includes("registry auth token") && classicMixed.stdout.includes("another registry") && !classicMixed.stdout.includes("CLASSIC_SECRET"));
 
 fs.rmSync(tmp, { recursive: true, force: true });
 process.exit(ok ? 0 : 1);

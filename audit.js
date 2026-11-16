@@ -132,9 +132,21 @@ function checkRegistryConfig(file) {
   let text = "";
   try { if (fs.statSync(file).size < 2e5) text = fs.readFileSync(file, "utf8"); } catch { return; }
   const yarn = /\.yarnrc\.yml$/.test(file);
+  const yarnClassic = /[\\/]\.yarnrc$/.test(file);
   for (const raw of text.split(/\r?\n/)) {
     const line = raw.trim();
     if (!line || line.startsWith("#") || line.startsWith(";")) continue;
+    const classicPath = yarnClassic && line.match(/^yarn-path\s+(.*)$/);
+    if (classicPath) {
+      const value = classicPath[1].trim();
+      const quoted = value.match(/^(["'])(.*?)\1\s*(?:#.*)?$/);
+      const binary = quoted ? quoted[2] : value.split(/\s+#/)[0].trim();
+      // In Yarn 1, unquoted false disables delegation; "false" is a path.
+      if (binary && !binary.startsWith("#") && (quoted || binary !== "false")) {
+        flag(file, "yarn-path configures Yarn 1 to run a project binary: " + binary);
+      }
+      continue;
+    }
     const yarnPath = yarn && line.match(/^yarnPath\s*:\s*(.*)$/);
     if (yarnPath) {
       const value = yarnPath[1].trim();

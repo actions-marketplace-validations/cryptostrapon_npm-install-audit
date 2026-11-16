@@ -19,4 +19,4 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.node }}
-      - run: node selftest.js
+      - run: npm test

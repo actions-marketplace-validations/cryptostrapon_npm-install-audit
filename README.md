@@ -16,6 +16,10 @@ It reads `package.json` for install hooks (`preinstall`, `install`, `postinstall
 
 No dependencies. No network. Read only.
 
+**Unreleased on main:** `.yarnrc` files are also checked for Yarn 1 `yarn-path`
+delegation, including quoted paths; unquoted `false` disables it. This check is
+not yet in the published `1.4.0` npm package or `v1.4.0` GitHub Action tag.
+
 We also contributed a manual checklist for this situation to the [OWASP NPM Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/NPM_Security_Cheat_Sheet.html): the section "Inspecting a project you did not write" ([#2908](https://github.com/OWASP/CheatSheetSeries/pull/2908)).
 
 ## Who it is for
@@ -132,6 +136,7 @@ The step fails when anything is flagged and sets the `findings` output to the nu
 - risky `.git/config` entries: `core.hooksPath`, `core.fsmonitor`, `sshCommand`, `pager`, `editor`, aliases that run shell commands, filter and diff drivers
 - VS Code tasks that run when the folder is opened (`"runOn": "folderOpen"`)
 - `yarnPath` in `.yarnrc.yml`, which configures Yarn to run a project-supplied binary instead of the installed one (also common in legitimate projects)
+- `yarn-path` in Yarn 1 `.yarnrc`, which delegates to a project-supplied Yarn binary unless set to unquoted `false`
 
 ## Before any git command
 
