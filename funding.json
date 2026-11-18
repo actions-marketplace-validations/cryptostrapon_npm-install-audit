@@ -1,0 +1,50 @@
+{
+  "$schema": "https://fundingjson.org/schema/v1.1.0.json",
+  "version": "v1.1.0",
+  "entity": {
+    "type": "group",
+    "role": "owner",
+    "name": "CryptoStrapon",
+    "email": "cryptostrapon@proton.me",
+    "description": "CryptoStrapon is a small team that investigates real crypto scams and turns them into free, open tools and plain-language guides. We maintain npm-install-audit, an open source pre-install checker for unfamiliar JavaScript projects, plus an open scam quiz and glossary.",
+    "webpageUrl": {
+      "url": "https://github.com/cryptostrapon"
+    }
+  },
+  "projects": [
+    {
+      "guid": "npm-install-audit",
+      "name": "npm-install-audit",
+      "description": "A zero-dependency, read-only Node.js scanner that checks a project you did not write before you run npm, yarn or pnpm install: install hooks, git hooks, registry overrides and auth tokens in .npmrc, yarnPath and .yarnrc yarn-path delegation, .pnpmfile.cjs, risky script settings and dependencies that bypass the npm registry. Available as a CLI on npm and as a GitHub Action. Its checklist is part of the OWASP NPM Security Cheat Sheet and the Security Alliance (SEAL) Frameworks.",
+      "webpageUrl": {
+        "url": "https://github.com/cryptostrapon/npm-install-audit"
+      },
+      "repositoryUrl": {
+        "url": "https://github.com/cryptostrapon/npm-install-audit"
+      },
+      "licenses": ["spdx:MIT"],
+      "tags": ["security", "supply-chain", "npm", "nodejs", "javascript", "developer-tools", "malware-detection"]
+    }
+  ],
+  "funding": {
+    "channels": [
+      {
+        "guid": "bank",
+        "type": "bank",
+        "description": "Bank transfer. Account details are shared privately on request."
+      }
+    ],
+    "plans": [
+      {
+        "guid": "maintenance-2027",
+        "status": "active",
+        "name": "Maintenance and new checks for 2027",
+        "description": "Twelve months of maintenance: new checks as attack techniques change (package manager configs, editor and agent auto-run files), cross-platform CI, faster triage of community pull requests and issues, and documentation for teams that review unfamiliar repositories before install.",
+        "amount": 10000,
+        "currency": "USD",
+        "frequency": "yearly",
+        "channels": ["bank"]
+      }
+    ]
+  }
+}
