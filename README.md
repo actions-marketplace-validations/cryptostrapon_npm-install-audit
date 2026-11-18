@@ -37,6 +37,20 @@ You got a take-home test from a recruiter, or a stranger asked you to "just run 
 
 ## Quick start
 
+### Try it without installing dependencies
+
+From a trusted checkout of this repository, run the built-in demo check with Node 18 or newer:
+
+```sh
+node ./scripts/check-safe-demo.cjs
+```
+
+The check passes when the scanner reports the two expected findings and the
+fixture's install hook has not run. Want to help verify the steps on your OS?
+Use [the independent testing checklist](https://github.com/cryptostrapon/npm-install-audit/issues/28).
+
+### Inspect an unfamiliar project
+
 With Node 18 or newer, run a trusted copy of the scanner from a trusted
 working directory, outside the project you are inspecting:
 
