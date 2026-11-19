@@ -218,4 +218,8 @@ reproduction. Start with a [good first issue](https://github.com/cryptostrapon/n
 
 If this helped, consider [starring the repository](https://github.com/cryptostrapon/npm-install-audit). Reports, corrections and contributions are welcome in the [issue tracker](https://github.com/cryptostrapon/npm-install-audit/issues).
 
+## Related
+
+- [Before you set up a hardware wallet](https://github.com/cryptostrapon/cryptostrapon-public/blob/main/checklists/hardware-wallet-setup.md): the same verify-the-path habit for signing devices, in English and Spanish
+
 MIT licensed. Maintained by [CryptoStrapon](https://cryptostrapon.com).
